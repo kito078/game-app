@@ -1,30 +1,8 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { Text } from "@chakra-ui/react";
+import useGames from "../hooks/useGames";
 
 const GameList = () => {
-  const [games, setGames] = useState([]);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("https://api.rawg.io/api/games", {
-          params: {
-            key: "11da95f2f2304c89bb370fb6b20d2969",
-            // Add any other parameters you need for filtering or sorting
-          },
-        });
-        setGames(response.data.results);
-      } catch (error) {
-        console.error(error);
-        setError(error.message);
-      }
-    };
-
-    fetchData();
-  }, []);
-
+  const { games, error } = useGames();
   return (
     <div>
       <h1>Game List</h1>
