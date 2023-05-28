@@ -4,10 +4,12 @@ import axios, { CanceledError } from "axios";
 const useGames = () => {
   const [games, setGames] = useState([]);
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const controller = new AbortController();
     const fetchData = async () => {
+      setIsLoading(true);
       try {
         const response = await axios.get(
           "https://api.rawg.io/api/games",
@@ -20,6 +22,7 @@ const useGames = () => {
           { signal: controller.signal }
         );
         setGames(response.data.results);
+        setIsLoading(false);
       } catch (err) {
         if (err instanceof CanceledError) return;
         setError(err.message);
@@ -31,7 +34,7 @@ const useGames = () => {
     return () => controller.abort();
   }, []);
 
-  return { games, error };
+  return { games, error, isLoading };
 };
 
 export default useGames;
